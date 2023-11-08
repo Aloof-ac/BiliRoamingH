@@ -85,8 +85,21 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                     BiliBiliPackage(lpparam.classLoader, param.args[0] as Context)
                     if (BuildConfig.DEBUG) {
+                        startHook(TestHook(lpparam.classLoader))
                         startHook(SSLHook(lpparam.classLoader))
+                        startHook(MossDebugHook(lpparam.classLoader))
+                        startHook(OkHttpDebugHook(lpparam.classLoader))
+                        startHook(BLogDebugHook(lpparam.classLoader))
                     }
+                    if (isLSPBuiltIn) {
+                        startHook(AppUpgradeHook(lpparam.classLoader))
+                    }
+                    startHook(OkHttpHook(lpparam.classLoader))
+                    startHook(TextFoldHook(lpparam.classLoader))
+                    startHook(PlaybackSpeedHook(lpparam.classLoader))
+                    startHook(FavFolderDialogHook(lpparam.classLoader))
+                    startHook(ChannelTabUIHook(lpparam.classLoader))
+                    startHook(LosslessSettingHook(lpparam.classLoader))
                     startHook(HintHook(lpparam.classLoader))
                     startHook(BangumiSeasonHook(lpparam.classLoader))
                     startHook(BangumiPlayUrlHook(lpparam.classLoader))
@@ -106,9 +119,11 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     startHook(SubtitleHook(lpparam.classLoader))
                     startHook(CopyHook(lpparam.classLoader))
                     startHook(LiveRoomHook(lpparam.classLoader))
-                    startHook(QualityHook(lpparam.classLoader))
+                    // startHook(QualityHook(lpparam.classLoader))
+                    startHook(TrialVipQualityHook(lpparam.classLoader))
                     startHook(DynamicHook(lpparam.classLoader))
                     startHook(ProtoBufHook(lpparam.classLoader))
+                    startHook(MossHook(lpparam.classLoader))
                     startHook(PlayArcConfHook(lpparam.classLoader))
                     startHook(TryWatchVipQualityHook(lpparam.classLoader))
                     startHook(AllowMiniPlayHook(lpparam.classLoader))
@@ -122,11 +137,13 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     startHook(WebViewHook(lpparam.classLoader))
                     startHook(P2pHook(lpparam.classLoader))
                     startHook(DanmakuHook(lpparam.classLoader))
+                    startHook(AdCommonHook(lpparam.classLoader))
+                    startHook(BlConfigHook(lpparam.classLoader))
                     startHook(BangumiPageAdHook(lpparam.classLoader))
                     startHook(VideoQualityHook(lpparam.classLoader))
                     startHook(PublishToFollowingHook(lpparam.classLoader))
                     startHook(UposReplaceHook(lpparam.classLoader))
-                    startHook(SpeedHook(lpparam.classLoader))
+                    // startHook(SpeedHook(lpparam.classLoader))
                 }
 
                 lpparam.processName.endsWith(":web") -> {

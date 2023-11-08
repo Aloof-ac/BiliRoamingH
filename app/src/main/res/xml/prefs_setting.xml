@@ -95,6 +95,12 @@
             android:key="disable_story_full"
             android:summary="@string/disable_story_full_summary"
             android:title="@string/disable_story_full_title" />
+        <MultiSelectListPreference
+            android:entries="@array/block_follow_button_entries"
+            android:entryValues="@array/block_follow_button_values"
+            android:key="block_follow_button"
+            android:summary="@string/block_follow_button_summary"
+            android:title="@string/block_follow_button_title" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="disable_main_page_story"
@@ -107,7 +113,38 @@
             android:title="@string/dialog_blur_background_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/miscellaneous_category">
+    <PreferenceCategory
+        android:key="misc"
+        android:title="@string/miscellaneous_category">
+        <Preference
+            android:key="text_fold"
+            android:summary="@string/text_fold_summary"
+            android:title="@string/text_fold_title" />
+
+        <Preference
+            android:key="playback_speed_override"
+            android:summary="@string/playback_speed_override_summary"
+            android:title="@string/playback_speed_override_title" />
+
+        <Preference
+            android:key="default_playback_speed"
+            android:summary="@string/default_playback_speed_summary"
+            android:title="@string/default_playback_speed_title" />
+
+        <Preference
+            android:key="long_press_playback_speed"
+            android:summary="@string/long_press_playback_speed_summary"
+            android:title="@string/long_press_playback_speed_title" />
+
+        <SwitchPreference
+            android:key="disable_auto_subscribe"
+            android:summary="@string/disable_auto_subscribe_summary"
+            android:title="@string/disable_auto_subscribe_title" />
+
+        <SwitchPreference
+            android:key="remember_lossless_setting"
+            android:title="@string/remember_lossless_setting_title" />
+
         <SwitchPreference
             android:key="teenagers_mode_dialog"
             android:summary="@string/teenagers_mode_dialog_summary"
@@ -284,6 +321,21 @@
             android:key="hidden"
             android:summary="@string/hidden_summary"
             android:title="@string/hidden_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="add_channel"
+            android:summary="@string/add_channel_summary"
+            android:title="@string/add_channel_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="skin"
+            android:summary="@string/skin_summary"
+            android:title="@string/skin_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="trial_vip_quality"
+            android:summary="@string/trial_vip_quality_summary"
+            android:title="@string/trial_vip_quality_title" />
         <Preference
             android:dependency="hidden"
             android:key="home_filter"
@@ -421,6 +473,27 @@
             android:title="@string/customize_dynamic_title" />
         <SwitchPreference
             android:dependency="hidden"
+            android:key="remove_ad_extra"
+            android:summary="@string/remove_ad_extra_summary"
+            android:title="@string/remove_ad_extra_title" />
+        <SwitchPreference
+            android:dependency="hidden"
+            android:key="purify_banner_ads"
+            android:summary="@string/purify_banner_ads_summary"
+            android:title="@string/purify_banner_ads_title" />
+        <Preference
+            android:dependency="hidden"
+            android:key="misc_remove_ads"
+            android:title="@string/misc_remove_ads_title" />
+        <MultiSelectListPreference
+            android:dependency="hidden"
+            android:entries="@array/filter_story_entries"
+            android:entryValues="@array/filter_story_values"
+            android:key="filter_story"
+            android:summary="@string/filter_story_summary"
+            android:title="@string/filter_story_title" />
+        <SwitchPreference
+            android:dependency="hidden"
             android:key="remove_video_relate_promote"
             android:summary="@string/remove_video_relate_promote_summary"
             android:title="@string/remove_video_relate_promote_title" />
@@ -543,6 +616,11 @@
                 android:action="android.intent.action.VIEW"
                 android:data="@string/afdian_url" />
         </Preference>
+
+        <Preference
+            android:key="description"
+            android:summary="@string/pref_description_summary"
+            android:title="@string/pref_description_title" />
 
         <Preference
             android:key="help"

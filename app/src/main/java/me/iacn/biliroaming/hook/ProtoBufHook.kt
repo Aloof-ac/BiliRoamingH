@@ -24,6 +24,7 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
     override fun startHook() {
         val hidden = sPrefs.getBoolean("hidden", false)
+        val removeCommentCm = sPrefs.getBoolean("remove_comment_cm", false)
         val blockLiveOrder = sPrefs.getBoolean("block_live_order", false)
         val purifyCity = sPrefs.getBoolean("purify_city", false)
         val removeHonor = sPrefs.getBoolean("remove_video_honor", false)
@@ -66,6 +67,23 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
         val blockCommentGuide = sPrefs.getBoolean("block_comment_guide", false)
         val blockVideoComment = sPrefs.getBoolean("block_video_comment", false)
         val blockViewPageAds = sPrefs.getBoolean("block_view_page_ads", false)
+        val removeViewPageChargeBtn = sPrefs.getBoolean("remove_view_page_charge_btn", false)
+
+        val blockFollowButton = sPrefs.getStringSet("block_follow_button", null).orEmpty()
+        if (blockFollowButton.isNotEmpty()) {
+            if (blockFollowButton.contains("comment")) {
+                "com.bapis.bilibili.main.community.reply.v1.ReplyControl".from(mClassLoader)
+                    ?.replaceMethod("getShowFollowBtn") { false }
+            }
+            if (blockFollowButton.contains("dynamic")) {
+                arrayOf(
+                    "com.bapis.bilibili.app.dynamic.v2.ModuleAuthor",
+                    "com.bapis.bilibili.app.dynamic.v2.ModuleAuthorForward"
+                ).forEach {
+                    it.from(mClassLoader)?.replaceMethod("getShowFollow") { false }
+                }
+            }
+        }
 
         if (hidden && (purifyCity || purifyCampus)) {
             listOf(
@@ -115,6 +133,9 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
             if (hidden && removeUpVipLabel) {
                 param.result.callMethod("getOwnerExt")?.callMethod("getVip")
                     ?.callMethod("clearLabel")
+            }
+            if (removeViewPageChargeBtn) {
+                param.result.callMethod("getReqUser")?.callMethod("clearElecPlusBtn")
             }
         }
 
@@ -233,9 +254,13 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
                     param.result = null
                     return@hookBeforeMethod
                 }
-                if (!blockCommentGuide) return@hookBeforeMethod
+                if (!(blockCommentGuide || removeCommentCm)) return@hookBeforeMethod
                 param.args[1] = param.args[1].mossResponseHandlerProxy { reply ->
                     reply?.runCatchingOrNull {
+                        if (removeCommentCm) {
+                            callMethod("getCm")?.callMethod("clearSourceContent")
+                        }
+                        if (!blockCommentGuide) return@mossResponseHandlerProxy
                         callMethod("getSubjectControl")?.run {
                             callMethod("clearEmptyBackgroundTextPlain")
                             callMethod("clearEmptyBackgroundTextHighlight")
@@ -384,6 +409,10 @@ class ProtoBufHook(classLoader: ClassLoader) : BaseHook(classLoader) {
 
             if (blockViewPageAds) {
                 param.result.callMethod("clearCm")
+            }
+
+            if (removeViewPageChargeBtn) {
+                param.result.callMethod("getReqUser")?.callMethod("clearElecPlusBtn")
             }
 
             param.result.callMethod("getTab")?.run {
